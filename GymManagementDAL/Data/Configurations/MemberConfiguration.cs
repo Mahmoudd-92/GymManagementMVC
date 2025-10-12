@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace GymManagementDAL.Data.Configurations
 {
-    internal class MemberConfiguration : IEntityTypeConfiguration<Member>
+    internal class MemberConfiguration : GymUserConfiguration<Member>, IEntityTypeConfiguration<Member>
     {
-        public void Configure(EntityTypeBuilder<Member> builder)
+        public new void Configure(EntityTypeBuilder<Member> builder)
         {
             builder.Property(x=> x.CreatedAt)
                 .HasColumnName("JoinDate")
@@ -14,7 +14,9 @@ namespace GymManagementDAL.Data.Configurations
 
             builder.HasOne(x => x.HealthRecord)
                 .WithOne()
-                .HasForeignKey<HealthRecord>(x => x.Id)
+                .HasForeignKey<HealthRecord>(x => x.Id);
+
+            base.Configure(builder);
         }
     }
 }
