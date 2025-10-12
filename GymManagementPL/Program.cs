@@ -1,4 +1,6 @@
 using GymManagementDAL.Data.Contexts;
+using GymManagementDAL.Repositories.Classes;
+using GymManagementDAL.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace GymManagementPL
@@ -15,6 +17,37 @@ namespace GymManagementPL
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
+
+            #region Types of (DI) services
+            #region Singleton
+            //builder.Services.AddSingleton<IGenericRepository<>, GenericRepository<>>();
+
+            ////service is created only once for the entire application and is shared by all 
+            //// the components that request it. 
+            //// Useful for services that need to maintain a global state or provide a common functionality, 
+            ////  such as logging, configuration, or caching.
+            #endregion
+
+            #region Scoped
+            //builder.Services.AddScoped<IGenericRepository<>, GenericRepository<>>();
+
+            ////service is created once per request (such as an HTTP request) 
+            //// and is disposed at the end of the request. 
+            ////useful for services that need to access request-specific data or resources, 
+            //// such as database context, user information, or configuration settings.
+            #endregion
+
+            #region Transient
+            //builder.Services.AddTransient<IGenericRepository<>, GenericRepository<>>();
+
+            ////service is created every time it is requested and is disposed 
+            //// as soon as it is no longer needed. 
+            ////useful for services that are lightweight and stateless, 
+            //// such as validators, mappers, or calculators.
+            #endregion
+            #endregion
+
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             var app = builder.Build();
 

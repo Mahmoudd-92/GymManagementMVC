@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace GymManagementDAL.Data.Configurations
 {
-    public class GymUserConfiguration : IEntityTypeConfiguration<GymUser>
+    public class GymUserConfiguration<T> : IEntityTypeConfiguration<T> where T : GymUser
     {
-        public void Configure(EntityTypeBuilder<GymUser> builder)
+        public void Configure(EntityTypeBuilder<T> builder)
         {
             builder.Property(x => x.Name)
                    .HasColumnType("varchar")
@@ -41,7 +41,7 @@ namespace GymManagementDAL.Data.Configurations
             builder.ToTable(x =>
             {
                 x.HasCheckConstraint("GymUser_EmailCheck", "Email LIKE '_%@_%._%'");
-                x.HasCheckConstraint("GymUser_PhoneCheck", "(LEN(Phone) = 11 AND Phone NOT LIKE '%[^0-9]%' AND (Phone LIKE '010%' OR Phone LIKE '011%' OR Phone LIKE '012%' OR Phone LIKE '015%')");
+                x.HasCheckConstraint("GymUser_PhoneCheck", "(LEN(Phone) = 11 AND Phone NOT LIKE '%[^0-9]%' AND (Phone LIKE '010%' OR Phone LIKE '011%' OR Phone LIKE '012%' OR Phone LIKE '015%'))");
             });
         }
     }
