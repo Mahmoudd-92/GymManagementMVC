@@ -43,6 +43,6 @@ namespace GymManagementBLL.ViewModels.TrainerViewModels
         public string Street { get; set; } = null!;
 
         [Required(ErrorMessage = "Speciality is Required.")]
-        public Specialities Specialities { get; set; }
+        public Specialties Specialities { get; set; }
     }
 }
