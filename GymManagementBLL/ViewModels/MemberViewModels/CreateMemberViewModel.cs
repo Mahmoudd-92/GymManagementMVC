@@ -1,7 +1,7 @@
 ﻿using GymManagementDAL.Entities.Enums;
 using System.ComponentModel.DataAnnotations;
 
-namespace GymManagementBLL.ViewModels.MemberViewModels
+namespace GymManagementBLL.ViewModels
 {
     public class CreateMemberViewModel
     {
@@ -30,14 +30,14 @@ namespace GymManagementBLL.ViewModels.MemberViewModels
         [Range(1, int.MaxValue, ErrorMessage = "Building Number must be greater than 0")]
         public int BuildingNumber { get; set; }
 
-        [Required(ErrorMessage ="City Is Required.")]
-        [StringLength(100, MinimumLength = 2, ErrorMessage ="City must be between 2 and 100 characters.")]
-        [RegularExpression(@"^[a-zA-Z]\s+$", ErrorMessage ="City can only contain letters and spaces.")]
+        [Required(ErrorMessage = "City Is Required.")]
+        [StringLength(100, MinimumLength = 2, ErrorMessage = "City must be between 2 and 100 characters.")]
+        [RegularExpression(@"^[a-zA-Z\s]+$", ErrorMessage = "City can only contain letters and spaces.")]
         public string City { get; set; } = null!;
 
-        [Required(ErrorMessage ="Street Is Required.")]
-        [StringLength(150, MinimumLength = 2, ErrorMessage ="Street must be between 2 and 150 characters.")]
-        [RegularExpression(@"^[a-zA-Z0-9]\s+$", ErrorMessage ="Street can only contain letters, numbers and spaces.")]
+        [Required(ErrorMessage = "Street Is Required.")]
+        [StringLength(150, MinimumLength = 2, ErrorMessage = "Street must be between 2 and 150 characters.")]
+        [RegularExpression(@"^[a-zA-Z0-9\s]+$", ErrorMessage = "Street can only contain letters, numbers and spaces.")]
         public string Street { get; set; } = null!;
 
         [Required(ErrorMessage = "Health Record Is Required.")]

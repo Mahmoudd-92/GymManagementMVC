@@ -1,7 +1,8 @@
 ﻿using GymManagementBLL.Services.Interfaces;
-using GymManagementBLL.ViewModels.MemberViewModels;
+using GymManagementBLL.ViewModels;
 using GymManagementDAL.Entities;
 using GymManagementDAL.Repositories.Interfaces;
+using System.Numerics;
 
 namespace GymManagementBLL.Services.Classes
 {
@@ -196,11 +197,12 @@ namespace GymManagementBLL.Services.Classes
             if (member is null)
                 return false;
 
-            if(IsEmailExist(model.Email))
-                return false;
+            var ExistEmail = _unitOfWork.GetRepository<Member>()
+                                .GetAll(x => x.Email == model.Email && x.Id != memberId);
 
-            if(IsPhoneExist(model.Phone)) 
-                return false;
+            var ExistingPhone = _unitOfWork.GetRepository<Member>()
+                                    .GetAll(y => y.Phone == model.Phone && y.Id != memberId);
+
 
             member.Email = model.Email;
             member.Phone = model.Phone;

@@ -1,5 +1,5 @@
-﻿using GymManagementBLL.ViewModels.SessionViewModels;
-using GymManagementSystemBLL.ViewModels.SessionViewModels;
+﻿using GymManagementBLL.ViewModels;
+using GymManagementSystemBLL.ViewModels;
 
 namespace GymManagementBLL.Services.Interfaces
 {

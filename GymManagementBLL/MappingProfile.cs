@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using GymManagementBLL.ViewModels.SessionViewModels;
+using GymManagementBLL.ViewModels;
 using GymManagementDAL.Entities;
-using GymManagementSystemBLL.ViewModels.SessionViewModels;
+using GymManagementSystemBLL.ViewModels;
 
 namespace GymManagementBLL
 {
