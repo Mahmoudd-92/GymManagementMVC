@@ -1,4 +1,4 @@
-﻿using GymManagementSystemBLL.ViewModels.AnalyticsViewModels;
+﻿using GymManagementBLL.ViewModels;
 
 namespace GymManagementBLL.Services.Interfaces
 {

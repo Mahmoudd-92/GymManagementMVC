@@ -1,7 +1,7 @@
 ﻿using GymManagementBLL.Services.Interfaces;
+using GymManagementBLL.ViewModels;
 using GymManagementDAL.Entities;
 using GymManagementDAL.Repositories.Interfaces;
-using GymManagementSystemBLL.ViewModels.AnalyticsViewModels;
 
 namespace GymManagementBLL.Services.Classes
 {
