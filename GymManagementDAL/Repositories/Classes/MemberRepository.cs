@@ -9,38 +9,38 @@ using System.Threading.Tasks;
 
 namespace GymManagementDAL.Repositories.Classes
 {
-    public class SessionRepository : ISessionRepository
+    public class MemberRepository : IMemberRepository
     {
         private readonly GymDbContext _context;
 
-        public SessionRepository(GymDbContext context)
+        public MemberRepository(GymDbContext context)
         {
             _context = context;
         }
 
-        public int Add(Session session)
+        public int Add(Member member)
         {
-            _context.Sessions.Add(session);
+            _context.Members.Add(member);
             return _context.SaveChanges();
         }
 
         public int Delete(int id)
         {
-            var session = GetById(id);
-            if (session is null)
+            var member = GetById(id);
+            if (member is null)
                 return 0;
 
-            _context.Remove(session);
+            _context.Remove(member);
             return _context.SaveChanges();
         }
 
-        public IEnumerable<Session> GetAll() => _context.Sessions.ToList();
+        public IEnumerable<Member> GetAll() => _context.Members.ToList();
 
-        public Session? GetById(int id) => _context.Sessions.Find(id);
+        public Member? GetById(int id) => _context.Members.Find(id);
 
-        public int Update(Session session)
+        public int Update(Member member)
         {
-            _context.Update(session);
+            _context.Update(member);
             return _context.SaveChanges();
         }
     }

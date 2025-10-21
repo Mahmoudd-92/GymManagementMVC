@@ -1,6 +1,5 @@
 ﻿using GymManagementDAL.Data.Contexts;
 using GymManagementDAL.Entities;
-using GymManagementDAL.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,38 +8,38 @@ using System.Threading.Tasks;
 
 namespace GymManagementDAL.Repositories.Classes
 {
-    public class SessionRepository : ISessionRepository
+    public class CategoryRepository
     {
         private readonly GymDbContext _context;
 
-        public SessionRepository(GymDbContext context)
+        public CategoryRepository(GymDbContext context)
         {
             _context = context;
         }
 
-        public int Add(Session session)
+        public int Add(Category category)
         {
-            _context.Sessions.Add(session);
+            _context.Categories.Add(category);
             return _context.SaveChanges();
         }
 
         public int Delete(int id)
         {
-            var session = GetById(id);
-            if (session is null)
+            var category = GetById(id);
+            if (category is null)
                 return 0;
 
-            _context.Remove(session);
+            _context.Remove(category);
             return _context.SaveChanges();
         }
 
-        public IEnumerable<Session> GetAll() => _context.Sessions.ToList();
+        public IEnumerable<Category> GetAll() => _context.Categories.ToList();
 
-        public Session? GetById(int id) => _context.Sessions.Find(id);
+        public Category? GetById(int id) => _context.Categories.Find(id);
 
-        public int Update(Session session)
+        public int Update(Category category)
         {
-            _context.Update(session);
+            _context.Update(category);
             return _context.SaveChanges();
         }
     }
