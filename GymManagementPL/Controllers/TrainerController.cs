@@ -1,7 +1,5 @@
-﻿using GymManagementBLL.Services.Classes;
-using GymManagementBLL.Services.Interfaces;
+﻿using GymManagementBLL.Services.Interfaces;
 using GymManagementBLL.ViewModels;
-using GymManagementDAL.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GymManagementPL.Controllers
