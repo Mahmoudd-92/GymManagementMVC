@@ -1,4 +1,4 @@
-﻿namespace GymManagementSystemBLL.ViewModels
+﻿namespace GymManagementBLL.ViewModels
 {
     public class SessionViewModel
     {
