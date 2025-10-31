@@ -9,6 +9,7 @@ namespace GymManagementBLL
         public MappingProfile()
         {
             MapSession();
+            MapMemberships();
         }
 
         private void MapSession()
@@ -25,6 +26,22 @@ namespace GymManagementBLL
             CreateMap<Category, CategorySelectViewModel>()
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.CategoryName));
 
+        }
+        private void MapMemberships()
+        {
+            CreateMap<Membership, MemberShipForMemberViewModel>()
+                     .ForMember(dist => dist.MemberName, Option => Option.MapFrom(Src => Src.Member.Name))
+                     .ForMember(dist => dist.PlanName, Option => Option.MapFrom(Src => Src.Plan.Name))
+                     .ForMember(dist => dist.StartDate, Option => Option.MapFrom(X => X.CreatedAt));
+
+            CreateMap<Membership, MemberShipViewModel>()
+                     .ForMember(dist => dist.MemberName, Option => Option.MapFrom(Src => Src.Member.Name))
+                     .ForMember(dist => dist.PlanName, Option => Option.MapFrom(Src => Src.Plan.Name))
+                                          .ForMember(dist => dist.StartDate, Option => Option.MapFrom(X => X.CreatedAt));
+
+            CreateMap<CreateMemberShipViewModel, Membership>();
+            CreateMap<Member, MemberSelectListViewModel>();
+            CreateMap<Plan, PlanSelectListViewModel>();
         }
     }
 }
