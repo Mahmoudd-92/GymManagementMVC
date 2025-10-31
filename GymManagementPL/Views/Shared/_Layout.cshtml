@@ -40,14 +40,17 @@ var currentController = ViewContext.RouteData.Values["Controller"]?.ToString();
                             <a class="nav-link px-3 py-2 mx-2 fw-bolder fs-5 @(currentController == "Home" ? "active" : "text-black-alternative")"
                                asp-action="Index" asp-controller="Home">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link px-3 py-2 mx-2 fw-bolder fs-5 @(currentController == "Member" ? "active" : "text-black-alternative")"
-                               asp-action="Index" asp-controller="Member">Members</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link px-3 py-2 mx-2 fw-bolder fs-5 @(currentController == "Trainer" ? "active" : "text-black-alternative")"
-                               asp-action="Index" asp-controller="Trainer">Trainers</a>
-                        </li>
+                        @if (User.IsInRole("SuperAdmin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link px-3 py-2 mx-2 fw-bolder fs-5 @(currentController == "Member" ? "active" : "text-black-alternative")"
+                                asp-action="Index" asp-controller="Member">Members</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link px-3 py-2 mx-2 fw-bolder fs-5 @(currentController == "Trainer" ? "active" : "text-black-alternative")"
+                                asp-action="Index" asp-controller="Trainer">Trainers</a>
+                            </li>
+                        }
                         <li class="nav-item">
                             <a class="nav-link px-3 py-2 mx-2 fw-bolder fs-5 @(currentController == "Session" ? "active" : "text-black-alternative")"
                                asp-action="Index" asp-controller="Session">Session</a>
@@ -63,6 +66,13 @@ var currentController = ViewContext.RouteData.Values["Controller"]?.ToString();
                         <li class="nav-item">
                             <a class="nav-link px-3 py-2 mx-2 fw-bolder fs-5 @(currentController == "Booking" ? "active" : "text-black-alternative")"
                                asp-action="Index" asp-controller="Booking">Sessions Schedule</a>
+                        </li>
+                        <li class="nav-item">
+                            <form asp-action="Logout" asp-controller="Account" method="post" class="d-inline">
+                                <button type="submit" class="btn btn-danger btn-link nav-link px-3 py-2 mx-2 fw-bolder fs-5 text-black-alternative">
+                                    Logout
+                                </button>
+                            </form>
                         </li>
                     </ul>
                 </div>

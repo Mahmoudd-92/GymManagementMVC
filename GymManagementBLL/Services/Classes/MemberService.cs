@@ -1,28 +1,31 @@
-﻿using GymManagementBLL.Services.Interfaces;
+﻿using GymManagementBLL.Services.AttachmentService;
+using GymManagementBLL.Services.Interfaces;
 using GymManagementBLL.ViewModels;
 using GymManagementDAL.Entities;
 using GymManagementDAL.Repositories.Interfaces;
-using System.Numerics;
 
 namespace GymManagementBLL.Services.Classes
 {
     public class MemberService : IMemberService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IAttachmentService attachmentService;
 
-        public MemberService(IUnitOfWork unitOfWork)
+        public MemberService(IUnitOfWork unitOfWork, IAttachmentService attachmentService)
         {
             _unitOfWork = unitOfWork;
+            this.attachmentService = attachmentService;
         }
 
         public bool CreateMember(CreateMemberViewModel model)
         {
             try
             {
-                if(IsEmailExist(model.Email))
+                if(IsEmailExist(model.Email) || IsPhoneExist(model.Phone))
                     return false;
-                if(IsPhoneExist(model.Phone)) 
-                    return false;
+
+                var PhotoName = attachmentService.Upload("members", model.PhotoFile);
+                if(string.IsNullOrEmpty(PhotoName)) return false;
 
                 var member = new Member
                 {
@@ -46,11 +49,18 @@ namespace GymManagementBLL.Services.Classes
                     }
                 };
 
+                member.Photo = PhotoName;
                 _unitOfWork.GetRepository<Member>().Add(member);
-
-                _unitOfWork.SaveChanges();
-
-                return true;
+                var IsCreated = _unitOfWork.SaveChanges()> 0;
+                if(!IsCreated)
+                {
+                    attachmentService.Delete(PhotoName, "members");
+                    return false;
+                }
+                else
+                {
+                    return IsCreated;
+                }
             }
             catch (Exception)
             {
@@ -115,7 +125,7 @@ namespace GymManagementBLL.Services.Classes
             return memberViewModel;
         }
 
-        public HealthRecordViewModel GetMemberHealthRecord(int memberId)
+        public HealthRecordViewModel? GetMemberHealthRecord(int memberId)
         {
             var memberHealthRecord = _unitOfWork.GetRepository<HealthRecord>().GetById(memberId);
 
@@ -158,14 +168,12 @@ namespace GymManagementBLL.Services.Classes
         {
             var member = _unitOfWork.GetRepository<Member>().GetById(memberId);
 
-            if (member is null)
-                return false;
+            if (member is null) return false;
 
             var activeBookings = _unitOfWork.GetRepository<Booking>()
                                  .GetAll(x => x.MemberId == memberId && x.Session.StartDate > DateTime.Now);
 
-            if(activeBookings.Any())
-                return false;
+            if(activeBookings.Any()) return false;
 
             var memberships = _unitOfWork.GetRepository<Membership>().GetAll(x => x.MemberId == memberId).ToList();
 
@@ -180,9 +188,11 @@ namespace GymManagementBLL.Services.Classes
                 }
 
                 _unitOfWork.GetRepository<Member>().Delete(member);
-                _unitOfWork.SaveChanges();
-
-                return true;
+                var IsDeleted =_unitOfWork.SaveChanges()> 0;
+                if (IsDeleted)
+                    attachmentService.Delete(member.Photo, "members");
+                
+                return IsDeleted;
             }
             catch (Exception)
             {

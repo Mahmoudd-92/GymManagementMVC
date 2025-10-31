@@ -63,7 +63,7 @@ namespace GymManagementBLL.Services.Classes
             return trainerViewModel;
         }
 
-        public TrainerViewModel GetTrainerDetails(int trainerId)
+        public TrainerViewModel? GetTrainerDetails(int trainerId)
         {
             var trainer = _unitOfWork.GetRepository<Trainer>().GetById(trainerId);
 
