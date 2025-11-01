@@ -1,9 +1,12 @@
 ﻿using GymManagementBLL.Services.Interfaces;
 using GymManagementBLL.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace GymManagementPL.Controllers
 {
+    [Authorize(Roles = "SuperAdmin")]
     public class TrainerController : Controller
     {
         private readonly ITrainerService trainerService;
@@ -30,7 +33,7 @@ namespace GymManagementPL.Controllers
                 ModelState.AddModelError("DataMissed", "Check Missing Data!");
                 return View(nameof(Create), input);
             }
-            bool result = trainerService.CreateTrainer(input);
+            var result = trainerService.CreateTrainer(input);
 
             if (result)
                 TempData["SuccessMessage"] = "Trainer created Successfully!";
@@ -70,6 +73,7 @@ namespace GymManagementPL.Controllers
         {
             if (!ModelState.IsValid)
             {
+                ModelState.AddModelError("DataMissed", "Check Missing Data!");
                 return View(input);
             }
 
@@ -82,7 +86,7 @@ namespace GymManagementPL.Controllers
 
             return RedirectToAction(nameof(Index));
         }
-        public IActionResult Delete([FromRoute] int id)
+        public IActionResult Delete(int id)
         {
             if (id <= 0)
             {
@@ -90,18 +94,17 @@ namespace GymManagementPL.Controllers
                 return RedirectToAction(nameof(Index));
             }
             var trainers = trainerService.GetTrainerDetails(id);
-
             if (trainers is null)
             {
                 TempData["ErrorMessage"] = "Trainer Not Found";
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewBag.MemberId = id;
+            ViewBag.TrainerId = trainers.Id;
             return View();
         }
 
-        public IActionResult DeleteConfirmed([FromForm] int id)
+        public IActionResult DeleteConfirmed(int id)
         {
             var result = trainerService.RemoveTrainer(id);
 

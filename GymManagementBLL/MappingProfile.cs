@@ -23,6 +23,21 @@ namespace GymManagementBLL
             CreateMap<UpdateSessionViewModel, Session>().ReverseMap();
 
             CreateMap<Trainer, TrainerSelectViewModel>();
+            CreateMap<Trainer, TrainerViewModel>()
+                .ForMember(dest => dest.Address, opt => opt.MapFrom(src => $"{src.Address.BuildingNumber} - {src.Address.Street} - {src.Address.City})"));
+            CreateMap<Trainer, UpdateTrainerViewModel>()
+               .ForMember(dist => dist.Street, opt => opt.MapFrom(src => src.Address.Street))
+               .ForMember(dist => dist.City, opt => opt.MapFrom(src => src.Address.City))
+               .ForMember(dist => dist.BuildingNumber, opt => opt.MapFrom(src => src.Address.BuildingNumber));
+            CreateMap< UpdateTrainerViewModel, Trainer>()
+                .ForMember(dist => dist.Name, opt => opt.Ignore())
+                .AfterMap((src, dest) =>
+                {
+                    dest.Address.BuildingNumber = src.BuildingNumber;
+                    dest.Address.City = src.City;
+                    dest.Address.Street = src.Street;
+                });
+
             CreateMap<Category, CategorySelectViewModel>()
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.CategoryName));
 

@@ -18,6 +18,7 @@
                         <small class="text-muted d-block mb-1">Editing Profile For</small>
                         <h4 class="mb-0 text-black">@Model.Name</h4>
                     </div>
+                    @Html.ValidationMessage("DataMissed", new { @class = "text-danger" })
                     <form asp-action="Edit" method="post">
                         <input hidden asp-for="Name" />
                         <!-- Personal Information -->
