@@ -6,10 +6,8 @@ namespace GymManagementDAL.Data.Configurations
 {
     public class GymUserConfiguration<T> : IEntityTypeConfiguration<T> where T : GymUser
     {
-        public virtual void Configure(EntityTypeBuilder<T> builder)
+        public void Configure(EntityTypeBuilder<T> builder)
         {
-            builder.HasKey(u => u.Id);
-
             builder.Property(x => x.Name)
                    .HasColumnType("varchar")
                    .HasMaxLength(50);
