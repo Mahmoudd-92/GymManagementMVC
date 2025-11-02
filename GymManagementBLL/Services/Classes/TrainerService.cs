@@ -16,11 +16,13 @@ namespace GymManagementBLL.Services.Classes
 
         public bool CreateTrainer(CreateTrainerViewModel model)
         {
-            if(IsEmailExist(model.Email))
-                return false;
+            var EmailExist = _unitOfWork.GetRepository<Trainer>()
+                 .GetAll(x => x.Email == model.Email);
 
-            if(IsPhoneExist(model.Phone)) 
-                return false;
+            var PhoneExist = _unitOfWork.GetRepository<Trainer>()
+                .GetAll(x => x.Phone == model.Phone);
+
+            if (EmailExist.Any() || PhoneExist.Any()) return false;
 
             var trainer = new Trainer
             {
@@ -72,6 +74,7 @@ namespace GymManagementBLL.Services.Classes
 
             var trainerViewModel = new TrainerViewModel
             {
+                Id = trainer.Id,
                 Name = trainer.Name,
                 Email = trainer.Email,
                 Phone = trainer.Phone,
@@ -112,7 +115,7 @@ namespace GymManagementBLL.Services.Classes
 
             if (trainer is null)
                 return false;
-
+            
             var upcomingSessions = _unitOfWork.GetRepository<Session>()
                                     .GetAll(x => x.TrainerId == trainerId && x.StartDate > DateTime.Now);
 
@@ -131,11 +134,13 @@ namespace GymManagementBLL.Services.Classes
             if(trainer is null)
                 return false;
 
-            if (IsEmailExist(model.Email))
-                return false;
+            var EmailExist = _unitOfWork.GetRepository<Trainer>()
+                .GetAll(x => x.Email == model.Email && x.Id != trainerId);
 
-            if (IsPhoneExist(model.Phone))
-                return false;
+            var PhoneExist = _unitOfWork.GetRepository<Trainer>()
+                .GetAll(x => x.Phone == model.Phone && x.Id != trainerId);
+
+            if (EmailExist.Any()|| PhoneExist.Any()) return false;
 
             trainer.Email = model.Email;
             trainer.Phone = model.Phone;
@@ -160,19 +165,6 @@ namespace GymManagementBLL.Services.Classes
 
             return $"{address.BuildingNumber}, {address.Street}, {address.City}";
         }
-
-        private bool IsEmailExist(string email)
-        {
-            var existingTrainer = _unitOfWork.GetRepository<Trainer>().GetAll(x => x.Email == email);
-            return existingTrainer is not null && existingTrainer.Any();
-        }
-
-        private bool IsPhoneExist(string phone)
-        {
-            var existingTrainer = _unitOfWork.GetRepository<Trainer>().GetAll(y => y.Phone == phone);
-            return existingTrainer is not null && existingTrainer.Any();
-        }
-
         #endregion
     }
 }

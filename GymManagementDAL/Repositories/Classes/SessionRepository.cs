@@ -21,6 +21,18 @@ namespace GymManagementDAL.Repositories.Classes
                     .ToList();
         }
 
+        public IEnumerable<Session> GetAllSessionsWithTrainerAndCategory(Func<Session, bool>? condition = null)
+        {
+            if (condition is null)
+                return _context.Sessions.Include(X => X.Trainer)
+                    .Include(X => X.Category)
+                    .ToList();
+            else
+                return _context.Sessions.Include(X => X.Trainer)
+                    .Include(X => X.Category)
+                    .Where(condition).ToList();
+        }
+
         public int GetCountOfBookedSlots(int sessionId)
         {
             return _context.Bookings.Where(x => x.SessionId == sessionId).Count();
