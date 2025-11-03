@@ -79,8 +79,11 @@ namespace GymManagementBLL.Services.Classes
             if (!IsValidDateRange(input.StartDate, input.EndDate)) 
                 return false;
 
-            _mapper.Map<Session>(input);
-            session.UpdatedAt = DateTime.UtcNow;
+            session.TrainerId = input.TrainerId;
+            session.StartDate = input.StartDate;
+            session.EndDate = input.EndDate;
+            session.Description = input.Description;
+            session.UpdatedAt = DateTime.Now;  
 
             _unitOfWork.GetRepository<Session>().Update(session);
             return _unitOfWork.SaveChanges() > 0;
@@ -121,15 +124,15 @@ namespace GymManagementBLL.Services.Classes
         }
         private bool IsValidDateRange(DateTime startDate, DateTime endDate)
         {
-            return endDate > startDate && startDate > DateTime.UtcNow;
+            return endDate > startDate && startDate > DateTime.Now;
         }
         private bool IsSessionAvailableForUpdate(Session session)
         {
             if (session is null) 
                 return false;
-            if (session.EndDate < DateTime.UtcNow) 
+            if (session.EndDate < DateTime.Now) 
                 return false;
-            if (session.StartDate <= DateTime.UtcNow) 
+            if (session.StartDate <= DateTime.Now) 
                 return false;
 
             var hasActiveBookings = _unitOfWork.SessionRepository.GetCountOfBookedSlots(session.Id);
@@ -142,9 +145,9 @@ namespace GymManagementBLL.Services.Classes
         {
             if (session is null) 
                 return false;
-            if (session.StartDate > DateTime.UtcNow) 
+            if (session.StartDate > DateTime.Now) 
                 return false;
-            if (session.StartDate <= DateTime.UtcNow && session.EndDate > DateTime.UtcNow) 
+            if (session.StartDate <= DateTime.Now && session.EndDate > DateTime.Now) 
                 return false;
 
             var hasActiveBookings = _unitOfWork.SessionRepository.GetCountOfBookedSlots(session.Id);
